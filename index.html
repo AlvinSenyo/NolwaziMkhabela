@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nolwazi Mkhabela, Digital Marketing Strategist</title>
+
+<!--
+  =====================================================================
+  SINGLE-FILE WEBSITE TEMPLATE
+  Layout clone + ProMarket colour theme, carousels/animations,
+  a Clients wall (real logos from /logos + text names), and a
+  persistent DARK-MODE TOGGLE.
+
+  THEME: coral #e27361 · indigo #6280f0 · peach #ffeae3 · light #f7f7f7
+  All colours are CSS variables under :root (light) / [data-theme=dark].
+
+  LOGOS: brands with a file in /logos show their real logo; the rest
+  show their name as text. To add a missing logo, drop the file in
+  /logos and swap that item's <span class="wm">…</span> for
+  <img src="logos/FILE" alt="Brand">.
+
+  CUSTOMIZE: search  [EDIT]  for content; .img-ph blocks are photo
+  placeholders (swap for <img>).
+  =====================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Fleur+De+Leah&family=Pinyon+Script&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,600;1,700;1,800&display=swap" rel="stylesheet" />
+
+<script>
+  (function(){
+    var t;
+    try{ t = localStorage.getItem('theme'); }catch(e){}
+    if(!t){ t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'; }
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+
+<style>
+  /* Name-logo font. Download "Scriptina" by Apostrophic Labs from 1001fonts
+     and drop the file into a  fonts/  folder (see fonts/README.txt).
+     Until then it falls back to the signature script below. */
+  @font-face{
+    font-family:'Scriptina';
+    src:url('fonts/Scriptina.woff2') format('woff2'),
+        url('fonts/Scriptina.woff')  format('woff'),
+        url('fonts/Scriptina.ttf')   format('truetype'),
+        url('fonts/Scriptina.otf')   format('opentype');
+    font-weight:normal;font-style:normal;font-display:swap;
+  }
+  :root{
+    --accent:#e27361; --accent2:#6280f0; --accent-soft:#ffeae3; --accent-soft2:#c2cfff;
+    --teal:#2a9d8f; --grad:linear-gradient(90deg,var(--accent),var(--accent2));
+    --bg:#ffffff; --surface:#f7f7f7; --callout:#ffeae3; --band:#14151a; --band-text:#e9e6f5;
+    --card:#16181d; --text:#16181d; --muted:#5e636e; --heading:#111213; --border:#e9e9ee;
+    --header-bg:#ffffff; --header-text:#16181d; --logo-tile:#ffffff; --footer-bg:#14151a; --footer-text:#c9cad0;
+    --font-body:'Poppins',system-ui,sans-serif; --font-script:'Dancing Script',cursive;
+    --font-logo:'Fleur De Leah','Pinyon Script','Dancing Script',cursive;
+    --font-head:'Poppins',system-ui,sans-serif; --wrap:1200px;
+  }
+  [data-theme="dark"]{
+    --bg:#0f1014; --surface:#15171d; --callout:#211a24; --band:#0b0c10; --band-text:#e9e6f5;
+    --card:#181a20; --text:#e7e8ec; --muted:#a2a7b2; --heading:#f4f5f7; --border:#262932;
+    --header-bg:#0d0e12; --header-text:#e7e8ec; --logo-tile:#f3f3f6; --footer-bg:#0b0c10; --footer-text:#b8bac2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body);color:var(--text);background:var(--bg);line-height:1.6;overflow-x:hidden;transition:background .3s,color .3s}
+  img{max-width:100%;display:block}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+
+  .btn{display:inline-block;border:none;cursor:pointer;background:var(--grad);color:#fff;font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:12px;padding:12px 26px;border-radius:22px;box-shadow:0 6px 18px rgba(98,128,240,.30);transition:transform .15s,box-shadow .15s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(226,115,97,.40)}
+
+  .img-ph{background:linear-gradient(135deg,rgba(226,115,97,.16),rgba(98,128,240,.16)),repeating-linear-gradient(45deg,rgba(128,128,128,.18) 0 12px,rgba(128,128,128,.10) 12px 24px);display:flex;align-items:center;justify-content:center;text-align:center;color:#8a8a8a;font-size:12px;letter-spacing:1px;text-transform:uppercase;font-weight:600}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+  .topbar{background:var(--grad);color:#fff;font-size:12px;padding:6px 12px;font-weight:500;position:relative;text-align:center}
+  .topbar a{color:#fff}
+  .theme-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:background .2s}
+  .theme-toggle:hover{background:rgba(255,255,255,.30)}
+  .theme-toggle svg{width:16px;height:16px}
+  .theme-toggle .moon{display:block}.theme-toggle .sun{display:none}
+  [data-theme="dark"] .theme-toggle .moon{display:none}
+  [data-theme="dark"] .theme-toggle .sun{display:block}
+
+  header{background:var(--header-bg);color:var(--header-text);position:sticky;top:0;z-index:40;transition:padding .25s,box-shadow .25s,background .3s;border-bottom:1px solid var(--border)}
+  header.shrink{box-shadow:0 6px 20px rgba(0,0,0,.12)}
+  .brand{text-align:center;padding:14px 0 8px;transition:transform .25s}
+  header.shrink .brand{transform:scale(.86)}
+  .brand .logo{display:inline-flex;align-items:center;justify-content:center;gap:14px;font-family:var(--font-logo);font-size:54px;line-height:1;font-weight:400;color:var(--heading)}
+  .brand .badge{width:52px;height:52px;flex:0 0 auto}
+  .brand .name{white-space:nowrap;text-transform:none}
+  .brand .tagline{letter-spacing:6px;font-size:11px;font-weight:600;margin-top:2px;color:var(--muted)}
+  nav.main{display:flex;justify-content:center;align-items:center;gap:28px;padding:6px 0 16px;flex-wrap:wrap}
+  nav.main a{font-size:13px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--header-text);transition:color .15s}
+  nav.main a:hover{color:var(--accent)}
+  nav.main .has-caret::after{content:" \25be";color:var(--muted)}
+
+  .hero{position:relative;min-height:660px;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;overflow:hidden;background:var(--bg);color:var(--heading);padding:36px 0}
+  .hero-social{position:absolute;left:22px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:16px;z-index:6}
+  .hero-social a{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--heading);background:var(--bg);transition:background .2s,color .2s,border-color .2s,transform .2s}
+  .hero-social a:hover{background:var(--grad);color:#fff;border-color:transparent;transform:translateY(-3px)}
+  .hero-social svg{width:18px;height:18px}
+  .hero-content{position:relative;z-index:3;padding-left:100px;padding-right:8px;opacity:0;transform:translateY(20px);animation:fadeUp .9s .15s forwards}
+  .hero-title{font-family:var(--font-head);font-weight:800;text-transform:uppercase;font-size:clamp(44px,7.6vw,108px);line-height:.9;letter-spacing:-2px;color:var(--heading)}
+  .hero-intro{margin:26px 0 0 6px;font-size:15px;font-weight:500;color:var(--muted);line-height:1.55;max-width:290px}
+  .hero-intro b{color:var(--heading);font-weight:700}
+  .hero-list{list-style:none;margin:24px 0 0 6px;display:flex;flex-wrap:wrap;gap:9px 22px}
+  .hero-list li{font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--heading);display:flex;align-items:center;gap:8px}
+  .hero-list li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .hero-scroll{margin:28px 0 0 6px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+  .hero-photo{position:relative;height:86%;min-height:520px;margin-right:34px;border-radius:18px;overflow:hidden;background:var(--surface);z-index:1}
+  .hero-slides{position:absolute;inset:0}
+  .hero-slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 18%;opacity:0;transition:opacity 1.1s ease}
+  .hero-slides img.active{opacity:1}
+  .hero-dots{position:absolute;bottom:14px;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:2}
+  .hero-dots button{width:8px;height:8px;border-radius:50%;border:none;background:rgba(255,255,255,.55);cursor:pointer;padding:0;transition:width .2s,background .2s}
+  .hero-dots button.active{background:#fff;width:22px;border-radius:4px}
+  @keyframes fadeUp{to{opacity:1;transform:none}}
+  @media(max-width:900px){
+    .hero{grid-template-columns:1fr;min-height:auto;padding:24px 0 46px}
+    .hero-photo{order:-1;margin:0 20px 26px;height:auto;min-height:0;aspect-ratio:4/5;width:calc(100% - 40px);max-width:520px;justify-self:center}
+    .hero-content{padding-left:74px;padding-right:22px}
+    .hero-title{font-size:clamp(40px,13vw,80px)}
+    .hero-social{left:14px;gap:12px}
+    .hero-social a{width:36px;height:36px}
+  }
+  @media(max-width:560px){
+    .hero-content{padding-left:58px}
+    .hero-social a{width:32px;height:32px}
+    .hero-social svg{width:15px;height:15px}
+  }
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  .section{padding:64px 0}
+  .heading{text-align:center;font-family:var(--font-head);font-weight:800;font-size:34px;letter-spacing:-.5px;text-transform:uppercase;color:var(--heading)}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;background:var(--surface)}
+  .split .img-ph{min-height:620px}
+  .split .copy{padding:70px 60px;display:flex;flex-direction:column;justify-content:center}
+  .split .copy p{margin-bottom:16px;color:var(--muted);font-size:15px}
+  .split .copy h3{font-size:17px;font-weight:700;color:var(--heading);margin:6px 0 12px}
+  .split:has(.about-photo){align-items:center}
+  .about-photo{overflow:hidden;border-radius:16px;margin:24px;max-width:580px;justify-self:center;align-self:center;box-shadow:0 18px 40px rgba(0,0,0,.12)}
+  .about-photo img{width:100%;height:auto;max-height:720px;object-fit:cover;object-position:center top;display:block}
+  .copy .lead-line{font-size:18px;font-weight:600;color:var(--heading);margin-bottom:18px}
+  .copy .lead-line .amp{color:var(--accent)}
+  .skills-label{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin:26px 0 12px}
+  .skills{display:flex;flex-wrap:wrap;gap:10px}
+  .skills span{background:var(--accent-soft);color:#7a3b30;font-weight:600;font-size:12.5px;letter-spacing:.3px;padding:8px 16px;border-radius:20px;border:1px solid transparent;transition:transform .15s,box-shadow .15s}
+  .skills span:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(226,115,97,.25)}
+  [data-theme="dark"] .skills span{background:rgba(226,115,97,.15);color:var(--accent);border-color:rgba(226,115,97,.30)}
+
+  /* eyebrow + section title (shared by new sections) */
+  .eyebrow{text-align:center;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .section-title{text-align:center;font-family:var(--font-head);font-weight:800;font-size:clamp(28px,4vw,40px);letter-spacing:-.5px;text-transform:uppercase;color:var(--heading);margin-bottom:46px}
+
+  /* Everything I Do */
+  .services{background:var(--surface);padding:76px 0}
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;max-width:var(--wrap);margin:0 auto;padding:0 24px}
+  .svc{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:32px 28px;position:relative;transition:transform .2s,box-shadow .2s,border-color .2s}
+  .svc:hover{transform:translateY(-6px);box-shadow:0 18px 36px rgba(0,0,0,.10);border-color:var(--accent)}
+  .svc .num{position:absolute;top:24px;right:26px;font-size:13px;font-weight:800;color:var(--accent2);opacity:.55}
+  .svc .ic{font-size:32px;line-height:1;margin-bottom:16px}
+  .svc h3{font-size:18px;font-weight:700;color:var(--heading);margin-bottom:10px}
+  .svc p{font-size:14px;color:var(--muted);line-height:1.6}
+
+  /* What I Offer (interactive accordion + image swap) */
+  .offer{background:var(--bg);padding:76px 0}
+  .offer-wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+  .offer-head{margin-bottom:34px}
+  .offer-grid{display:grid;grid-template-columns:1fr .78fr;gap:44px;align-items:start}
+  .offer-list{display:flex;flex-direction:column}
+  .offer-item{border-top:1px solid var(--border);cursor:pointer}
+  .offer-item:last-child{border-bottom:1px solid var(--border)}
+  .offer-row{display:flex;align-items:center;gap:18px;padding:22px 4px}
+  .offer-num{font-size:14px;font-weight:800;color:var(--accent2);width:28px;flex:0 0 auto}
+  .offer-item h3{font-size:clamp(19px,2.3vw,26px);font-weight:800;color:var(--muted);transition:color .25s;flex:1;margin:0}
+  .offer-item.active h3{color:var(--heading)}
+  .offer-plus{width:20px;height:20px;position:relative;flex:0 0 auto}
+  .offer-plus::before,.offer-plus::after{content:"";position:absolute;background:var(--accent);transition:transform .3s,opacity .3s}
+  .offer-plus::before{top:9px;left:0;width:20px;height:2px}
+  .offer-plus::after{left:9px;top:0;width:2px;height:20px}
+  .offer-item.active .offer-plus::after{transform:scaleY(0);opacity:0}
+  .offer-desc{max-height:0;overflow:hidden;opacity:0;transition:max-height .45s ease,opacity .35s ease}
+  .offer-item.active .offer-desc{max-height:240px;opacity:1}
+  .offer-desc p{padding:0 10px 22px 46px;margin:0;color:var(--muted);font-size:14.5px;line-height:1.65}
+  .offer-media{position:sticky;top:110px;border-radius:18px;overflow:hidden;background:var(--surface);height:540px}
+  .offer-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 16%;opacity:0;transition:opacity .55s ease}
+  .offer-media img.active{opacity:1}
+  @media(max-width:900px){
+    .offer-grid{grid-template-columns:1fr}
+    .offer-media{position:relative;top:0;order:-1;height:auto;aspect-ratio:4/5;max-width:460px;width:100%;margin:0 auto 6px}
+  }
+
+  /* By the Numbers (impact band) */
+  .impact{background:var(--band);color:#fff;padding:72px 0}
+  .impact .eyebrow{color:var(--accent)}
+  .impact .section-title{color:#fff}
+  .impact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;max-width:var(--wrap);margin:0 auto;padding:0 24px}
+  .impact-item{text-align:center;padding:26px 12px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);transition:transform .2s,border-color .2s}
+  .impact-item:hover{transform:translateY(-5px);border-color:rgba(226,115,97,.5)}
+  .impact-num{font-family:var(--font-head);font-size:clamp(36px,5.4vw,56px);font-weight:800;line-height:1;letter-spacing:-1px;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .impact-label{margin-top:12px;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#c9cad4}
+  @media(max-width:768px){.impact-grid{grid-template-columns:repeat(2,1fr)}}
+
+  /* Selected Work */
+  .work{background:var(--bg);padding:76px 0}
+  .feature-card{max-width:var(--wrap);margin:0 auto;padding:36px;background:var(--surface);border:1px solid var(--border);border-radius:20px}
+  .pill{display:inline-block;background:var(--grad);color:#fff;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:16px}
+  .feature-card h3{font-size:clamp(22px,3vw,28px);font-weight:800;color:var(--heading);margin-bottom:6px}
+  .feature-sub{color:var(--accent2);font-weight:600;font-size:14px;margin-bottom:16px}
+  .feature-card>p{color:var(--muted);font-size:15px;max-width:780px;margin-bottom:24px}
+  .feature-body{display:grid;grid-template-columns:1.3fr 1fr;gap:32px}
+  .feature-body ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+  .feature-body li{position:relative;padding-left:24px;font-size:14px;color:var(--text)}
+  .feature-body li::before{content:"\2713";position:absolute;left:0;color:var(--accent);font-weight:800}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-content:start}
+  .stat{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+  .stat b{display:block;font-size:19px;font-weight:800;color:var(--heading);line-height:1.2}
+  .stat span{font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .tags span{background:var(--accent-soft);color:#7a3b30;font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:14px}
+  [data-theme="dark"] .tags span{background:rgba(226,115,97,.15);color:var(--accent)}
+  .work-links{display:flex;gap:20px;flex-wrap:wrap;margin-top:20px}
+  .work-links a{font-size:13px;font-weight:700;color:var(--accent2);transition:color .15s}
+  .work-links a:hover{color:var(--accent)}
+  .client-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;max-width:var(--wrap);margin:26px auto 0;padding:0 24px}
+  .client{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;transition:transform .2s,box-shadow .2s,border-color .2s}
+  .client:hover{transform:translateY(-6px);box-shadow:0 16px 32px rgba(0,0,0,.10);border-color:var(--accent)}
+  .client .role{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+  .client h4{font-size:19px;font-weight:800;color:var(--heading);margin-bottom:10px}
+  .client p{font-size:14px;color:var(--muted);line-height:1.6}
+  @media(max-width:900px){
+    .svc-grid,.client-grid{grid-template-columns:repeat(2,1fr)}
+    .feature-body{grid-template-columns:1fr}
+  }
+  @media(max-width:560px){
+    .svc-grid,.client-grid{grid-template-columns:1fr}
+    .stats{grid-template-columns:1fr 1fr}
+  }
+
+  .truth{position:relative;background:var(--band);color:var(--band-text);overflow:hidden}
+  .truth .inner{max-width:820px;margin:0 auto 0 0;padding:90px 24px 90px 60px;position:relative;z-index:2}
+  .truth h3{color:var(--accent);font-size:20px;font-weight:700;margin-bottom:14px}
+  .truth p{margin-bottom:16px;font-size:15px;color:#cfc9e6}
+  .truth .ghost{position:absolute;right:0;top:0;bottom:0;width:42%;z-index:1;opacity:.12;background:radial-gradient(circle at 60% 40%,var(--accent2),transparent 60%)}
+
+  .callout{background:var(--callout);text-align:center;padding:56px 24px}
+  .callout h2{font-size:30px;font-weight:800;font-style:italic;color:var(--heading)}
+  .callout h2 .alt{display:block;color:var(--accent)}
+  .callout p{max-width:560px;margin:16px auto 22px;color:var(--muted);font-size:14px}
+
+  .cards{display:grid;grid-template-columns:repeat(6,1fr)}
+  .card{position:relative;overflow:hidden}
+  .card .label{text-align:center;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:12px 4px;background:var(--bg);color:var(--heading);border-bottom:1px solid var(--border)}
+  .card .img-ph{height:290px;filter:grayscale(1);transition:filter .35s,transform .35s}
+  .card:hover .img-ph{filter:grayscale(0);transform:scale(1.05)}
+  .card .foot{text-align:center;font-weight:700;letter-spacing:1px;font-size:12px;text-transform:uppercase;padding:16px 4px;background:var(--accent-soft);color:#7a3b30}
+  [data-theme="dark"] .card .foot{color:var(--accent)}
+
+  .testi{background:var(--surface)}
+  .carousel{position:relative;margin-top:40px}
+  .viewport{overflow:hidden}
+  .track{display:flex;transition:transform .5s ease}
+  .slide{flex:0 0 25%;padding:0 11px;box-sizing:border-box}
+  @media(max-width:900px){.slide{flex-basis:50%}}
+  @media(max-width:560px){.slide{flex-basis:100%}}
+  .quote-card{background:var(--card);color:#fff;border-radius:8px;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.14);height:100%}
+  .quote-card .ph{height:210px;position:relative}
+  .quote-card .ph .img-ph{height:100%;filter:grayscale(1) brightness(.65)}
+  .quote-card .ph blockquote{position:absolute;left:0;right:0;bottom:14px;padding:0 16px;text-align:center;font-style:italic;font-size:13px;font-weight:600;line-height:1.4}
+  .quote-card .who{background:var(--accent-soft);color:#5a2c24;text-align:center;padding:12px 6px}
+  .quote-card .who .name{font-weight:800;font-size:13px;letter-spacing:.5px;text-transform:uppercase}
+  .quote-card .who .role{font-size:11px;color:#8a5248}
+  .cbtn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;background:var(--grad);color:#fff;font-size:20px;line-height:1;box-shadow:0 6px 16px rgba(0,0,0,.22);z-index:3}
+  .cbtn:hover{filter:brightness(1.08)}
+  .cbtn.prev{left:-6px}.cbtn.next{right:-6px}
+  .dots{display:flex;justify-content:center;gap:9px;margin-top:24px}
+  .dots button{width:10px;height:10px;border-radius:50%;border:none;background:var(--border);cursor:pointer;padding:0;transition:transform .2s,background .2s}
+  .dots button.active{background:var(--grad);transform:scale(1.25)}
+
+  .clients{background:var(--bg);padding:64px 0 72px}
+  .clients .sub{text-align:center;color:var(--muted);font-size:14px;margin-top:6px}
+  .mq{overflow:hidden;margin-top:34px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+  .mq-track{display:flex;gap:22px;width:max-content}
+  .mq.row1 .mq-track{animation:marquee 46s linear infinite}
+  .mq.row2 .mq-track{animation:marquee 52s linear infinite reverse}
+  .mq:hover .mq-track{animation-play-state:paused}
+  .logo-item{flex:0 0 auto;height:96px;min-width:200px;padding:14px 26px;display:flex;align-items:center;justify-content:center;background:var(--logo-tile);border:1px solid var(--border);border-radius:12px;transition:box-shadow .25s,transform .25s,border-color .25s}
+  .logo-item:hover{box-shadow:0 10px 24px rgba(0,0,0,.12);transform:translateY(-3px);border-color:var(--accent)}
+  .logo-item img{max-height:60px;max-width:150px;width:auto;object-fit:contain}
+  /* text-name brands (no logo file) — always dark on the light tile */
+  .wm{font-weight:800;font-size:19px;letter-spacing:.3px;color:#1f2430;white-space:nowrap;text-align:center;line-height:1.15}
+  .wm small{display:block;font-weight:600;font-size:9px;letter-spacing:1.5px;color:#6280f0;text-transform:uppercase;margin-top:3px}
+
+  .promo{position:relative;color:#fff;text-align:center;overflow:hidden;background:var(--band)}
+  .promo .band{background:linear-gradient(90deg,var(--accent2),var(--accent));background-size:200% 100%;padding:34px 24px;display:flex;align-items:center;justify-content:center;gap:14px;animation:shift 8s linear infinite}
+  @keyframes shift{to{background-position:200% 0}}
+  .promo .band h2{font-size:46px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+  .promo .body{padding:40px 24px}
+  .promo .body p{font-size:22px;font-weight:800;font-style:italic;max-width:640px;margin:0 auto 18px}
+
+  footer{background:var(--footer-bg);color:var(--footer-text);padding:64px 0 26px}
+  .footer-inner{max-width:var(--wrap);margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1.3fr 2fr;gap:48px;align-items:start}
+  footer .flogo{font-family:var(--font-logo);font-size:40px;line-height:1.1;color:#fff;text-transform:none}
+  .fbio{margin:14px 0 18px;font-size:13.5px;color:var(--footer-text);max-width:330px;line-height:1.65}
+  .footer-links{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+  .footer-links h4{color:#fff;font-family:var(--font-head);font-size:13px;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+  .footer-links a,.footer-links p{display:block;font-size:14px;color:var(--footer-text);margin-bottom:10px}
+  .footer-links a{transition:color .15s}
+  .footer-links a:hover{color:var(--accent)}
+  .socials{display:flex;gap:12px;margin-top:4px}
+  .socials a{display:inline-flex}
+  .socials span{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.10);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#eee;transition:background .2s,color .2s}
+  .socials a:hover span{background:var(--grad);color:#fff}
+  .copybar{text-align:center;color:#7d7f88;font-size:12px;margin-top:46px;border-top:1px solid rgba(255,255,255,.10);padding-top:20px}
+
+  .cookie{position:fixed;left:0;right:0;bottom:0;background:var(--band);color:#e6e6e6;display:flex;align-items:center;gap:16px;padding:14px 20px;font-size:12px;z-index:50}
+  .cookie p{flex:1}
+  .cookie .btn{padding:9px 18px}
+  .cookie .ghost{background:rgba(255,255,255,.16);box-shadow:none}
+
+  @media(max-width:900px){
+    .split{grid-template-columns:1fr}.split .img-ph{min-height:340px}.split .copy{padding:44px 28px}
+    .cards{grid-template-columns:repeat(3,1fr)}.footer-inner{grid-template-columns:1fr;gap:34px}
+    .truth .inner{padding-left:24px}
+  }
+  @media(max-width:560px){
+    .brand .logo{font-size:40px}nav.main{gap:16px}.hero .lead{font-size:18px}.heading{font-size:26px}
+    .cards{grid-template-columns:repeat(2,1fr)}.footer-links{grid-template-columns:1fr}.cbtn{display:none}
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a href="mailto:nolwazimkhabela21@gmail.com" style="color:#fff;font-weight:700;letter-spacing:.5px">Book Now &amp; Expand Your Reach</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+
+  <header id="site-header">
+    <div class="brand">
+      <div class="logo"><span class="name">Nolwazi Mkhabela</span></div>
+    </div>
+    <nav class="main">
+      <a href="#">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">What I Offer</a>
+      <a href="#clients">Clients</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-social">
+      <a href="https://www.instagram.com/nolly_mkhabela/" target="_blank" rel="noopener" aria-label="Instagram" title="@nolly_mkhabela">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/nolwazi-mkhabela-81a9032ba/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.75-2.05 4 0 4.75 2.6 4.75 6V21h-4v-5.3c0-1.26-.02-2.9-1.77-2.9-1.77 0-2.04 1.38-2.04 2.8V21H9z"/></svg>
+      </a>
+      <a href="mailto:nolwazimkhabela21@gmail.com" aria-label="Email" title="nolwazimkhabela21@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+      </a>
+    </div>
+
+    <div class="hero-content">
+      <h1 class="hero-title">Digital<br>Marketing<br>Strategist</h1>
+      <p class="hero-intro"><b>I'm Nolwazi Mkhabela.</b><br>Based in KwaZulu-Natal,<br>South Africa</p>
+      <ul class="hero-list"><li>Campaign Strategy</li><li>Paid Media</li><li>Content Creation</li></ul>
+      <div class="hero-scroll">Scroll Down &#8595;</div>
+    </div>
+
+    <div class="hero-photo">
+      <div class="hero-slides">
+        <img src="logos/1.jpg.jpeg" alt="Nolwazi Mkhabela" class="active">
+        <img src="logos/2.jpg.jpeg" alt="" aria-hidden="true">
+        <img src="logos/3.jpg.jpeg" alt="" aria-hidden="true">
+        <img src="logos/4.jpg.jpeg" alt="" aria-hidden="true">
+      </div>
+      <div class="hero-dots" id="heroDots"></div>
+    </div>
+  </section>
+
+  <section class="section" id="about" style="padding-bottom:24px">
+    <h2 class="heading reveal">About Nolwazi</h2>
+  </section>
+
+  <section class="split">
+    <div class="about-photo reveal"><img src="logos/IMG_1192.jpg.jpeg" alt="Nolwazi Mkhabela"></div>
+    <div class="copy reveal">
+      <p class="lead-line">A KZN creative who wears many hats: Digital Strategist, Radio Presenter, MC, Speaker, Facilitator <span class="amp">&amp;</span> Content Creator.</p>
+      <p>I've never been great at picking just one lane, and I've stopped apologising for it. Strategy, content and paid media aren't separate jobs to me. They're one big, colourful ecosystem, and I love living right where they overlap. One morning I'm mapping out the story a brand needs to tell, and that same afternoon I'm deep in a Google Ads dashboard or shaping a post that stops the scroll.</p>
+
+      <h3>What I actually do</h3>
+      <p>From organic social and SEO to Meta and Google Ads, right up to big, noisy launches, I bring a full toolkit and, just as importantly, the judgement to know which tool the moment is really asking for. It's not about doing everything. It's about doing the right thing well, and making it feel effortless.</p>
+
+      <h3>On air &amp; on stage</h3>
+      <p>You'll catch me on the Midlands 104FM breakfast show, bringing the same energy to the mic that I bring to a campaign brief. Early starts, proper laughs, and a real love for meeting people where they are. That energy travels: as an MC and speaker I've hosted rooms and graced stages including the prestigious Vtulindlela Summit, reading the crowd and keeping the good vibes moving.</p>
+
+      <p>I've worked across metro scale campaigns, personal brands, hospitality, automotive, beauty and entertainment, which is a fancy way of saying I've learned to adapt to any audience, any platform, any room. Different brief, same obsession: work that connects, and work that actually delivers.</p>
+
+      <div class="skills-label">What I'm known for</div>
+      <div class="skills">
+        <span>Social Media Management</span>
+        <span>Meta Ads</span>
+        <span>Google Ads</span>
+        <span>Content Creation</span>
+        <span>MC / Hosting</span>
+        <span>Public Speaking</span>
+        <span>Campaign Strategy</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="truth">
+    <div class="ghost"></div>
+    <div class="inner reveal">
+      <h3>Why Work With Me</h3>
+      <p>Most brands don't need more noise. They need someone who understands both the strategy and the story, and who can move between a boardroom, a studio and a stage without missing a beat.</p>
+      <p>That is exactly where I live. From leading a metro scale launch for Kenako, to going live every weekday on Midlands 104FM, to hosting stages like the Vtulindlela Summit, I bring the same energy whether I'm building a campaign or holding a room.</p>
+      <p>If you want work that connects with real people and actually moves the numbers, let's make something worth talking about.</p>
+      <a href="mailto:nolwazimkhabela21@gmail.com" class="btn" style="margin-top:8px">Let's Talk</a>
+    </div>
+  </section>
+
+  <section class="callout reveal">
+    <h2>Book Now &amp; <span class="alt">Expand Your Reach.</span></h2>
+    <p>Big ideas, bold content, and a voice that lands. Let's turn your audience into a community and your goals into real results.</p>
+    <a href="mailto:nolwazimkhabela21@gmail.com" class="btn">Book Now</a>
+  </section>
+
+  <!-- ============ WHAT I OFFER ============ -->
+  <section class="offer" id="services">
+    <div class="offer-wrap">
+      <div class="offer-head">
+        <h2 class="section-title reveal" style="text-align:left;margin-bottom:0">What I Offer</h2>
+      </div>
+      <div class="offer-grid reveal">
+        <div class="offer-list">
+          <div class="offer-item active">
+            <div class="offer-row"><span class="offer-num">01</span><h3>Digital Strategist &amp; Content Creator</h3><span class="offer-plus"></span></div>
+            <div class="offer-desc"><p>Social media management, paid media, SEO, and content creation for brands across South Africa and beyond. Turning digital goals into measurable results.</p></div>
+          </div>
+          <div class="offer-item">
+            <div class="offer-row"><span class="offer-num">02</span><h3>Radio Presenter</h3><span class="offer-plus"></span></div>
+            <div class="offer-desc"><p>On air presenter at Midlands 104FM, hosting the breakfast show and bringing energy, personality and community connection to KZN listeners daily.</p></div>
+          </div>
+          <div class="offer-item">
+            <div class="offer-row"><span class="offer-num">03</span><h3>MC &amp; Events Host</h3><span class="offer-plus"></span></div>
+            <div class="offer-desc"><p>Commanding and charismatic master of ceremonies for corporate events, launches, award ceremonies, and brand activations. Fluent in English and isiZulu.</p></div>
+          </div>
+          <div class="offer-item">
+            <div class="offer-row"><span class="offer-num">04</span><h3>Speaker &amp; Panellist</h3><span class="offer-plus"></span></div>
+            <div class="offer-desc"><p>Sought-after speaker on digital marketing, content creation, and personal branding. Featured speaker at the Vtulindlela Summit and other major platforms.</p></div>
+          </div>
+          <div class="offer-item">
+            <div class="offer-row"><span class="offer-num">05</span><h3>Facilitator &amp; Trainer</h3><span class="offer-plus"></span></div>
+            <div class="offer-desc"><p>Workshop facilitator for digital marketing, social media strategy and content creation. Empowering individuals and teams to show up boldly and effectively online.</p></div>
+          </div>
+          <div class="offer-item">
+            <div class="offer-row"><span class="offer-num">06</span><h3>Brand Ambassador &amp; Influencer</h3><span class="offer-plus"></span></div>
+            <div class="offer-desc"><p>Authentic brand partnerships and ambassador campaigns across skincare, automotive and hospitality. Creating content that resonates and converts for the brands she represents.</p></div>
+          </div>
+        </div>
+        <div class="offer-media">
+          <img src="logos/1.jpg.jpeg" alt="Nolwazi Mkhabela" class="active">
+          <img src="logos/2.jpg.jpeg" alt="" aria-hidden="true">
+          <img src="logos/mc.jpg.jpeg" alt="Nolwazi hosting as MC" aria-hidden="true">
+          <img src="logos/speaker.jpeg" alt="Nolwazi on a speaker panel" aria-hidden="true" style="object-position:left center">
+          <img src="logos/IMG_1192.jpg.jpeg" alt="" aria-hidden="true">
+          <img src="logos/1.jpg.jpeg" alt="" aria-hidden="true">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BY THE NUMBERS ============ -->
+  <section class="impact" id="impact">
+    <div class="eyebrow reveal">By the Numbers</div>
+    <h2 class="section-title reveal">Impact at a Glance</h2>
+    <div class="impact-grid">
+      <div class="impact-item reveal"><div class="impact-num">12+</div><div class="impact-label">Brands &amp; Clients</div></div>
+      <div class="impact-item reveal"><div class="impact-num">6</div><div class="impact-label">Roles, One Creative</div></div>
+      <div class="impact-item reveal"><div class="impact-num">104FM</div><div class="impact-label">On Air, Weekday Breakfast</div></div>
+      <div class="impact-item reveal"><div class="impact-num">Metro</div><div class="impact-label">Scale Campaigns Led</div></div>
+    </div>
+  </section>
+
+  <!-- ===== What People Say (testimonials) — COMMENTED OUT; remove this line and the closing marker below to re-enable =====
+  <section class="section testi">
+    <div class="wrap">
+      <h2 class="heading reveal">What People Say</h2>
+      <div class="carousel reveal" id="carousel">
+        <button class="cbtn prev" aria-label="Previous">&#8249;</button>
+        <div class="viewport">
+          <div class="track" id="track">
+            <div class="slide"><div class="quote-card"><div class="ph"><div class="img-ph">Photo</div><blockquote>"A short, punchy quote from a well-known name."</blockquote></div><div class="who"><div class="name">Person One</div><div class="role">Title / Company</div></div></div></div>
+            <div class="slide"><div class="quote-card"><div class="ph"><div class="img-ph">Photo</div><blockquote>"Another glowing endorsement goes right here."</blockquote></div><div class="who"><div class="name">Person Two</div><div class="role">Title / Company</div></div></div></div>
+            <div class="slide"><div class="quote-card"><div class="ph"><div class="img-ph">Photo</div><blockquote>"Keep quotes to one or two lines for impact."</blockquote></div><div class="who"><div class="name">Person Three</div><div class="role">Title / Company</div></div></div></div>
+            <div class="slide"><div class="quote-card"><div class="ph"><div class="img-ph">Photo</div><blockquote>"The best speaker we have ever hosted."</blockquote></div><div class="who"><div class="name">Person Four</div><div class="role">Title / Company</div></div></div></div>
+            <div class="slide"><div class="quote-card"><div class="ph"><div class="img-ph">Photo</div><blockquote>"Electric on stage — our audience was captivated."</blockquote></div><div class="who"><div class="name">Person Five</div><div class="role">Title / Company</div></div></div></div>
+            <div class="slide"><div class="quote-card"><div class="ph"><div class="img-ph">Photo</div><blockquote>"Insightful, funny and unforgettable."</blockquote></div><div class="who"><div class="name">Person Six</div><div class="role">Title / Company</div></div></div></div>
+          </div>
+        </div>
+        <button class="cbtn next" aria-label="Next">&#8250;</button>
+      </div>
+      <div class="dots" id="dots"></div>
+    </div>
+  </section>
+  ===== end testimonials ===== -->
+
+  <!-- ============ CLIENTS WALL ============ -->
+  <!-- Brands with a file in /logos show their real logo; the rest show
+       their name. Add a logo later: drop the file in /logos and replace
+       that item's <span class="wm">…</span> with <img src="logos/FILE" alt="Brand">. -->
+  <section class="clients" id="clients">
+    <div class="wrap">
+      <h2 class="heading reveal">Clients &amp; Partners</h2>
+      <p class="sub reveal">Brands and venues I've worked with, many of them right here in KwaZulu-Natal</p>
+    </div>
+
+    <div class="mq row1 reveal">
+      <div class="mq-track">
+        <div class="logo-item"><img src="logos/Wedgewood_Logo.avif" alt="Wedgewood" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/astron%20energy.png" alt="Astron Energy" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/mcdonalds-logo.png" alt="McDonald's" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/amazon.jpg" alt="Amazon" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/Kenako-Marketing-Logo-Wide-RGB.svg" alt="Kenako Marketing" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/dermalogica.png" alt="Dermalogica" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/BYD-Logo.png" alt="BYD" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/Midlands_104.png" alt="Midlands 104" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/mount_shekinah.jpg" alt="Mount Shekinah" loading="lazy"></div>
+        <div class="logo-item"><span class="wm">The Harvest Table<small>KZN, Midlands</small></span></div>
+        <div class="logo-item"><span class="wm">Midlands Meander<small>KZN</small></span></div>
+        <div class="logo-item"><img src="logos/belvidere.webp" alt="Belvidere Stays" loading="lazy"></div>
+        <div class="logo-item"><span class="wm">Krispy Kreme</span></div>
+        <!-- duplicate set for seamless loop -->
+        <div class="logo-item"><img src="logos/Wedgewood_Logo.avif" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><img src="logos/astron%20energy.png" alt="Astron Energy" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/mcdonalds-logo.png" alt="McDonald's" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/amazon.jpg" alt="Amazon" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/Kenako-Marketing-Logo-Wide-RGB.svg" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><img src="logos/dermalogica.png" alt="Dermalogica" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/BYD-Logo.png" alt="BYD" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/Midlands_104.png" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><img src="logos/mount_shekinah.jpg" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><span class="wm">The Harvest Table<small>KZN, Midlands</small></span></div>
+        <div class="logo-item"><span class="wm">Midlands Meander<small>KZN</small></span></div>
+        <div class="logo-item"><img src="logos/belvidere.webp" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><span class="wm">Krispy Kreme</span></div>
+      </div>
+    </div>
+
+    <div class="mq row2 reveal">
+      <div class="mq-track">
+        <div class="logo-item"><img src="logos/house_shoe.jpg" alt="Horse Shoe Bend" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/vasiy%20college.png" alt="Varsity College" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/thehedgehog.png" alt="The Hedgehog" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/toyota.jpg" alt="Toyota" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/jetour.webp" alt="Jetour" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/PEDROS_LOGO.jpg" alt="Pedro's" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/wackys.jpg" alt="Wackys" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/umgenisteamrailway.jpg" alt="Umgeni Steam Railway" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/museum%20of%20illusion.webp" alt="Museum of Illusions" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/Sense-Wellness-Institute-SA.png" alt="Senses Spa" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/Asteria-Logo.webp" alt="Asteria Jewellery" loading="lazy"></div>
+        <div class="logo-item"><span class="wm">Infinity Estate</span></div>
+        <div class="logo-item"><img src="logos/gowan_valley_logo.jpg" alt="Gowan Valley" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/vhi_spa.svg" alt="Vhi Skin &amp; Spa" loading="lazy"></div>
+        <!-- duplicate set -->
+        <div class="logo-item"><img src="logos/house_shoe.jpg" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><img src="logos/vasiy%20college.png" alt="Varsity College" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/thehedgehog.png" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><img src="logos/toyota.jpg" alt="Toyota" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/jetour.webp" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><img src="logos/PEDROS_LOGO.jpg" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><img src="logos/wackys.jpg" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><img src="logos/umgenisteamrailway.jpg" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><img src="logos/museum%20of%20illusion.webp" alt="Museum of Illusions" loading="lazy"></div>
+        <div class="logo-item"><img src="logos/Sense-Wellness-Institute-SA.png" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><img src="logos/Asteria-Logo.webp" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><span class="wm">Infinity Estate</span></div>
+        <div class="logo-item"><img src="logos/gowan_valley_logo.jpg" alt="" aria-hidden="true"></div>
+        <div class="logo-item"><img src="logos/vhi_spa.svg" alt="" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="flogo">Nolwazi&nbsp;Mkhabela</div>
+        <p class="fbio">A KZN creative who wears many hats: Digital Strategist, Radio Presenter, MC and Content Creator.</p>
+        <div class="socials">
+          <a href="https://www.instagram.com/nolly_mkhabela/" target="_blank" rel="noopener" title="Instagram"><span>IG</span></a>
+          <a href="https://www.linkedin.com/in/nolwazi-mkhabela-81a9032ba/" target="_blank" rel="noopener" title="LinkedIn"><span>in</span></a>
+          <a href="mailto:nolwazimkhabela21@gmail.com" title="Email"><span>@</span></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div><h4>Navigate</h4><a href="#">Home</a><a href="#about">About</a><a href="#services">What I Offer</a><a href="#clients">Clients</a></div>
+        <div><h4>Connect</h4><a href="https://www.instagram.com/nolly_mkhabela/" target="_blank" rel="noopener">Instagram</a><a href="https://www.linkedin.com/in/nolwazi-mkhabela-81a9032ba/" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:nolwazimkhabela21@gmail.com">Email</a></div>
+        <div><h4>Contact</h4><p><a href="mailto:nolwazimkhabela21@gmail.com">nolwazimkhabela21@gmail.com</a></p><p>Midlands 104FM</p><p>KwaZulu-Natal, SA</p></div>
+      </div>
+    </div>
+    <div class="copybar">© <span id="yr"></span> Nolwazi Mkhabela. All rights reserved.</div>
+  </footer>
+
+  <div class="cookie" id="cookie">
+    <p>We use cookies to give you the most relevant experience. By clicking "Accept All" you consent to the use of cookies.</p>
+    <button class="btn ghost" onclick="dismissCookie()">Settings</button>
+    <button class="btn" onclick="dismissCookie()">Accept All</button>
+  </div>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    function dismissCookie(){ document.getElementById('cookie').style.display='none'; }
+
+    // ---- hero slideshow (cross-fade 1..4) ----
+    (function(){
+      var slides = document.querySelectorAll('.hero-slides img');
+      if(!slides.length) return;
+      var dotsWrap = document.getElementById('heroDots');
+      var i = 0, timer;
+      slides.forEach(function(_, n){
+        var b = document.createElement('button');
+        if(n===0) b.className = 'active';
+        b.addEventListener('click', function(){ show(n); restart(); });
+        dotsWrap.appendChild(b);
+      });
+      var dots = dotsWrap.children;
+      function show(n){
+        slides[i].classList.remove('active'); dots[i].classList.remove('active');
+        i = (n + slides.length) % slides.length;
+        slides[i].classList.add('active'); dots[i].classList.add('active');
+      }
+      function nextS(){ show(i + 1); }
+      function start(){ timer = setInterval(nextS, 3500); }
+      function restart(){ clearInterval(timer); start(); }
+      start();
+    })();
+
+    // ---- What I Offer: accordion + image swap ----
+    (function(){
+      var items = document.querySelectorAll('.offer-item');
+      var imgs = document.querySelectorAll('.offer-media img');
+      if(!items.length) return;
+      function activate(n){
+        items.forEach(function(it,i){ it.classList.toggle('active', i===n); });
+        imgs.forEach(function(im,i){ im.classList.toggle('active', i===n); });
+      }
+      items.forEach(function(it,n){
+        it.addEventListener('mouseenter', function(){ activate(n); });
+        it.querySelector('.offer-row').addEventListener('click', function(){ activate(n); });
+      });
+    })();
+
+    document.getElementById('themeToggle').addEventListener('click', function(){
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try{ localStorage.setItem('theme', next); }catch(e){}
+    });
+
+    var header = document.getElementById('site-header');
+    addEventListener('scroll', function(){ header.classList.toggle('shrink', scrollY > 40); });
+
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.12});
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+    (function(){
+      var track = document.getElementById('track');
+      if(!track) return;
+      var slides = Array.prototype.slice.call(track.children);
+      var dotsWrap = document.getElementById('dots');
+      var carousel = document.getElementById('carousel');
+      var index = 0, timer;
+      function perView(){ return getComputedStyle(slides[0]).flexBasis === '100%' ? 1 : (window.innerWidth <= 900 ? 2 : 4); }
+      function pages(){ return Math.max(1, slides.length - perView() + 1); }
+      function buildDots(){
+        dotsWrap.innerHTML='';
+        for(var i=0;i<pages();i++){ var b=document.createElement('button');
+          b.addEventListener('click',(function(i){return function(){ go(i); reset(); };})(i)); dotsWrap.appendChild(b); }
+      }
+      function render(){
+        var w = slides[0].getBoundingClientRect().width;
+        track.style.transform='translateX('+(-index*w)+'px)';
+        Array.prototype.forEach.call(dotsWrap.children,function(d,i){ d.classList.toggle('active', i===index); });
+      }
+      function go(i){ index=(i+pages())%pages(); render(); }
+      function next(){ go(index+1); } function prev(){ go(index-1); }
+      carousel.querySelector('.next').addEventListener('click', function(){ next(); reset(); });
+      carousel.querySelector('.prev').addEventListener('click', function(){ prev(); reset(); });
+      function auto(){ timer=setInterval(next,4000); }
+      function reset(){ clearInterval(timer); auto(); }
+      carousel.addEventListener('mouseenter', function(){ clearInterval(timer); });
+      carousel.addEventListener('mouseleave', auto);
+      var x0=null;
+      carousel.addEventListener('touchstart',function(e){ x0=e.touches[0].clientX; },{passive:true});
+      carousel.addEventListener('touchend',function(e){ if(x0===null)return; var dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>40){ dx<0?next():prev(); reset(); } x0=null; });
+      function init(){ if(index>=pages()) index=0; buildDots(); render(); }
+      addEventListener('resize', init);
+      init(); auto();
+    })();
+  </script>
+</body>
+</html>
