@@ -57,7 +57,7 @@
     --card:#16181d; --text:#16181d; --muted:#5e636e; --heading:#111213; --border:#e9e9ee;
     --header-bg:#ffffff; --header-text:#16181d; --logo-tile:#ffffff; --footer-bg:#14151a; --footer-text:#c9cad0;
     --font-body:'Poppins',system-ui,sans-serif; --font-script:'Dancing Script',cursive;
-    --font-logo:'Fleur De Leah','Pinyon Script','Dancing Script',cursive;
+    --font-logo:'Poppins',system-ui,sans-serif;
     --font-head:'Poppins',system-ui,sans-serif; --wrap:1200px;
   }
   [data-theme="dark"]{
@@ -94,7 +94,7 @@
   header.shrink{box-shadow:0 6px 20px rgba(0,0,0,.12)}
   .brand{text-align:center;padding:14px 0 8px;transition:transform .25s}
   header.shrink .brand{transform:scale(.86)}
-  .brand .logo{display:inline-flex;align-items:center;justify-content:center;gap:14px;font-family:var(--font-logo);font-size:54px;line-height:1;font-weight:400;color:var(--heading)}
+  .brand .logo{display:inline-flex;align-items:center;justify-content:center;gap:14px;font-family:var(--font-logo);font-size:30px;line-height:1;font-weight:700;letter-spacing:-.3px;color:var(--heading)}
   .brand .badge{width:52px;height:52px;flex:0 0 auto}
   .brand .name{white-space:nowrap;text-transform:none}
   .brand .tagline{letter-spacing:6px;font-size:11px;font-weight:600;margin-top:2px;color:var(--muted)}
@@ -211,6 +211,23 @@
   .impact-label{margin-top:12px;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#c9cad4}
   @media(max-width:768px){.impact-grid{grid-template-columns:repeat(2,1fr)}}
 
+  /* Testimonials slideshow */
+  .testimonials{background:var(--surface);padding:76px 0;text-align:center}
+  .tslider{position:relative;max-width:780px;margin:34px auto 0}
+  .tviewport{overflow:hidden}
+  .ttrack{display:flex;transition:transform .5s ease}
+  .tslide{flex:0 0 100%;padding:0 34px;margin:0;display:flex;flex-direction:column;align-items:center}
+  .tmark{font-family:var(--font-head);font-size:64px;line-height:.7;color:var(--accent);opacity:.45;margin-bottom:8px}
+  .tquote{font-size:clamp(17px,2.2vw,22px);font-weight:500;font-style:italic;color:var(--heading);line-height:1.55;max-width:660px;margin:0 auto 22px}
+  .tname{font-weight:800;font-size:15px;letter-spacing:.6px;color:var(--heading);text-transform:uppercase}
+  .tbiz{font-size:13px;color:var(--accent);margin-top:2px}
+  .tbtn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;background:var(--grad);color:#fff;font-size:20px;line-height:1;box-shadow:0 6px 16px rgba(0,0,0,.2);z-index:3}
+  .tbtn.prev{left:-6px}.tbtn.next{right:-6px}
+  .tdots{display:flex;justify-content:center;gap:9px;margin-top:28px}
+  .tdots button{width:10px;height:10px;border-radius:50%;border:none;background:var(--border);cursor:pointer;padding:0;transition:transform .2s,background .2s}
+  .tdots button.active{background:var(--grad);transform:scale(1.25)}
+  @media(max-width:560px){.tbtn{display:none}.tslide{padding:0 8px}}
+
   /* Selected Work */
   .work{background:var(--bg);padding:76px 0}
   .feature-card{max-width:var(--wrap);margin:0 auto;padding:36px;background:var(--surface);border:1px solid var(--border);border-radius:20px}
@@ -310,7 +327,7 @@
 
   footer{background:var(--footer-bg);color:var(--footer-text);padding:64px 0 26px}
   .footer-inner{max-width:var(--wrap);margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1.3fr 2fr;gap:48px;align-items:start}
-  footer .flogo{font-family:var(--font-logo);font-size:40px;line-height:1.1;color:#fff;text-transform:none}
+  footer .flogo{font-family:var(--font-logo);font-size:24px;font-weight:700;letter-spacing:-.3px;line-height:1.1;color:#fff;text-transform:none}
   .fbio{margin:14px 0 18px;font-size:13.5px;color:var(--footer-text);max-width:330px;line-height:1.65}
   .footer-links{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
   .footer-links h4{color:#fff;font-family:var(--font-head);font-size:13px;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
@@ -334,7 +351,7 @@
     .truth .inner{padding-left:24px}
   }
   @media(max-width:560px){
-    .brand .logo{font-size:40px}nav.main{gap:16px}.hero .lead{font-size:18px}.heading{font-size:26px}
+    .brand .logo{font-size:24px}nav.main{gap:16px}.hero .lead{font-size:18px}.heading{font-size:26px}
     .cards{grid-template-columns:repeat(2,1fr)}.footer-links{grid-template-columns:1fr}.cbtn{display:none}
   }
 </style>
@@ -387,10 +404,10 @@
 
     <div class="hero-photo">
       <div class="hero-slides">
-        <img src="logos/1.jpg.jpeg" alt="Nolwazi Mkhabela" class="active">
-        <img src="logos/2.jpg.jpeg" alt="" aria-hidden="true">
-        <img src="logos/3.jpg.jpeg" alt="" aria-hidden="true">
-        <img src="logos/4.jpg.jpeg" alt="" aria-hidden="true">
+        <img src="logos/top1.jpeg" alt="Nolwazi Mkhabela" class="active">
+        <img src="logos/top2.jpeg" alt="" aria-hidden="true">
+        <img src="logos/top3.jpeg" alt="" aria-hidden="true">
+        <img src="logos/top4.jpeg" alt="" aria-hidden="true">
       </div>
       <div class="hero-dots" id="heroDots"></div>
     </div>
@@ -523,6 +540,46 @@
     </div>
   </section>
   ===== end testimonials ===== -->
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section class="testimonials" id="testimonials">
+    <div class="eyebrow reveal">Testimonials</div>
+    <h2 class="section-title reveal">What Clients Say</h2>
+    <!-- [EDIT] Replace each slide's quote, name and business with real client testimonials -->
+    <div class="tslider reveal" id="tslider">
+      <button class="tbtn prev" aria-label="Previous">&#8249;</button>
+      <div class="tviewport">
+        <div class="ttrack" id="ttrack">
+          <blockquote class="tslide">
+            <div class="tmark">&#8220;</div>
+            <p class="tquote">Working with Nolwazi was effortless. She understood our brand instantly and turned our ideas into content that actually converted.</p>
+            <div class="tname">Client Name</div>
+            <div class="tbiz">Business / Brand</div>
+          </blockquote>
+          <blockquote class="tslide">
+            <div class="tmark">&#8220;</div>
+            <p class="tquote">She lit up the room as our MC and kept the energy high from start to finish. Our guests are still talking about it.</p>
+            <div class="tname">Client Name</div>
+            <div class="tbiz">Business / Brand</div>
+          </blockquote>
+          <blockquote class="tslide">
+            <div class="tmark">&#8220;</div>
+            <p class="tquote">Our socials have never looked better. The strategy, the visuals, the growth, she delivered on all of it.</p>
+            <div class="tname">Client Name</div>
+            <div class="tbiz">Business / Brand</div>
+          </blockquote>
+          <blockquote class="tslide">
+            <div class="tmark">&#8220;</div>
+            <p class="tquote">A true professional with real heart. Nolwazi gets people, and it shows in everything she creates.</p>
+            <div class="tname">Client Name</div>
+            <div class="tbiz">Business / Brand</div>
+          </blockquote>
+        </div>
+      </div>
+      <button class="tbtn next" aria-label="Next">&#8250;</button>
+    </div>
+    <div class="tdots" id="tdots"></div>
+  </section>
 
   <!-- ============ CLIENTS WALL ============ -->
   <!-- Brands with a file in /logos show their real logo; the rest show
@@ -669,6 +726,39 @@
         it.addEventListener('mouseenter', function(){ activate(n); });
         it.querySelector('.offer-row').addEventListener('click', function(){ activate(n); });
       });
+    })();
+
+    // ---- testimonials slideshow ----
+    (function(){
+      var track = document.getElementById('ttrack');
+      if(!track) return;
+      var slides = Array.prototype.slice.call(track.children);
+      var dotsWrap = document.getElementById('tdots');
+      var slider = document.getElementById('tslider');
+      var i = 0, timer;
+      slides.forEach(function(_, k){
+        var b = document.createElement('button');
+        if(k===0) b.className = 'active';
+        b.addEventListener('click', function(){ go(k); reset(); });
+        dotsWrap.appendChild(b);
+      });
+      var dots = dotsWrap.children;
+      function render(){
+        var w = slides[0].getBoundingClientRect().width;
+        track.style.transform = 'translateX(' + (-i*w) + 'px)';
+        Array.prototype.forEach.call(dots, function(d,k){ d.classList.toggle('active', k===i); });
+      }
+      function go(n){ i = (n + slides.length) % slides.length; render(); }
+      function next(){ go(i+1); }
+      function prev(){ go(i-1); }
+      slider.querySelector('.tbtn.next').addEventListener('click', function(){ next(); reset(); });
+      slider.querySelector('.tbtn.prev').addEventListener('click', function(){ prev(); reset(); });
+      function start(){ timer = setInterval(next, 5000); }
+      function reset(){ clearInterval(timer); start(); }
+      slider.addEventListener('mouseenter', function(){ clearInterval(timer); });
+      slider.addEventListener('mouseleave', start);
+      window.addEventListener('resize', render);
+      render(); start();
     })();
 
     document.getElementById('themeToggle').addEventListener('click', function(){
